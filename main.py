@@ -7,9 +7,13 @@ class Main:
         title = "test2"
         body = "body"
         head = "dev"
-        base = "main"
         ticket = "SI-320"
         
+        # Body
+        body = "TEST TEST"
+        
+        
+        # Enter branches you want to create PR for
         branches = [
             "main",
             'staging',
@@ -17,7 +21,12 @@ class Main:
             "release-b",   
         ]
         
+        reviewers = [
+            "nerdydaemon10",
+        ]
+        
         git.create_pull_request(head=head, branches=branches, ticket=ticket, body=body)
+        #git.request_reviewers(reviewers)
 
 if __name__ == '__main__':
     Main()
