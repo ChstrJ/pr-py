@@ -25,7 +25,8 @@ class Main:
             "nerdydaemon10",
         ]
         
-        git.create_pull_request(head=head, branches=branches, ticket=ticket, body=body)
+        #git.create_pull_request(head=head, branches=branches, ticket=ticket, body=body)
+        git.list_pulls("all")
         #git.request_reviewers(reviewers)
 
 if __name__ == '__main__':

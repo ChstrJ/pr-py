@@ -39,7 +39,24 @@ class GithubAPI:
                 print(f"{head} -> {branches[i]} \n")
                 self.pull_number.append(response['number'])
             
-            
+    def list_pulls(self, state):
+        url = f"{self.base_url}/pulls"
+        
+        params = {
+            "state": state 
+        }
+        
+        res = req.get(url, headers=self.headers, params=params)
+        
+        if res.status_code == 200:
+            prs = res.json()
+            for pr in prs:
+                pr_number = pr['number']
+                pr_title = pr['title']
+                pr_status = pr['state']
+                print(f"PR #{pr_number}: {pr_title} - Status: {pr_status}")
+    
+      
     def request_reviewers(self, reviewers):
         
         for i in range(len(reviewers)):
