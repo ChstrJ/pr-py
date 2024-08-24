@@ -17,27 +17,41 @@ class GithubAPI:
             "X-GitHub-Api-Version": "2022-11-28"
         }
         
-    def create_pull_request(self, body, head, branches, ticket):
+    def create_pull_request(self, body, head, branches, title, ticket=None):
         url = f"{self.base_url}/pulls"
         
         for i in range(len(branches)):
         
             payload = {
-            "title": f"[{ticket}]/[{head}] -> {branches[i]}",
+            "title": f"{title}/[{head}] -> {branches[i]}",
             "body": body,
             "head": head,
             "base": branches[i]
             }
             
-            print(f"Creating a PR for {branches[i]}")
+            print(f"Creating a PR for {branches[i]} ...")
             
+            if not self.branch_exists(branches[i]):
+                print(f"Branch {branches[i]} doesn't exist")
+                continue
+            
+            # Create PR
             request = req.post(url, json=payload, headers=self.headers)
             response = request.json()
             
-            if request.status_code == 201:
-                print(f"Successfully created PR at {utils.getToday()}")
-                print(f"{head} -> {branches[i]} \n")
-                self.pull_number.append(response['number'])
+            try:
+                if request.status_code == 201:
+                    print(f"Successfully created PR at {utils.getToday()}")
+                    print(f"{head} -> {branches[i]} \n")
+                    self.pull_number.append(response['number'])
+            except Exception as e:
+                print(f"An error occured: {e}")
+                
+    def branch_exists(self, branch_name):
+        url = f"{self.base_url}/branches/{branch_name}"
+        request = req.get(url, headers=self.headers)
+        return request.status_code == 200
+
             
     def list_pulls(self, state):
         url = f"{self.base_url}/pulls"
