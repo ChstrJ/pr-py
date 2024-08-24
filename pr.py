@@ -17,7 +17,7 @@ class GithubAPI:
             "X-GitHub-Api-Version": "2022-11-28"
         }
         
-    def create_pull_request(self, body, head, branches, title, ticket=None):
+    def create_pull_request(self, body, head, branches, title):
         url = f"{self.base_url}/pulls"
         
         for i in range(len(branches)):
@@ -29,11 +29,12 @@ class GithubAPI:
             "base": branches[i]
             }
             
-            print(f"Creating a PR for {branches[i]} ...")
+            print(f"Creating PR for {branches[i]}...")
+            print(f"Repo Owner / Repo Name: {self.repo_owner} / {self.repo_name}")
             
             if not self.branch_exists(branches[i]):
                 print(f"Branch {branches[i]} doesn't exist")
-                continue
+                break
             
             # Create PR
             request = req.post(url, json=payload, headers=self.headers)

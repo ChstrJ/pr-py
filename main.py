@@ -26,7 +26,6 @@ class Main:
         # Enter branches you want to create PR for
         branches = [
             "main",
-            "staging",
             "release-a",
             "release-b"
         ]
