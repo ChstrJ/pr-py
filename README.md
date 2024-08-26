@@ -1,3 +1,4 @@
+### Automated pull request
 
 ## Environment Variables
 
@@ -5,15 +6,9 @@ To run this project, you will need to add the following environment variables to
 
 `TOKEN=`
 
-`REPO_OWNER=`
-
-`REPO_NAME=`
-
 ```
-.venv\Scripts\activate
-
-
-
-pip install -r requirements.txt
+1. .venv\Scripts\activate
+2. pip install -r requirements.txt
+3. py main.py
 ```
 
