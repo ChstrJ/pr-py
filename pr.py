@@ -29,9 +29,6 @@ class GithubAPI:
             "base": branches[i]
             }
             
-            print(f"Creating PR for {branches[i]}...")
-            print(f"Repo Owner / Repo Name: {self.repo_owner} / {self.repo_name}")
-            
             if not self.branch_exists(branches[i]):
                 print(f"Branch {branches[i]} doesn't exist")
                 break
@@ -42,9 +39,13 @@ class GithubAPI:
             
             try:
                 if request.status_code == 201:
+                    print(f"Creating PR for {branches[i]}...")
+                    print(f"Repo Owner / Repo Name: {self.repo_owner} / {self.repo_name}")
                     print(f"Successfully created PR at {utils.getToday()}")
-                    print(f"{head} -> {branches[i]} \n")
+                    print(f"{head} -> {branches[i]}")
+                    print("--------------------------------------------------- \n")
                     self.pull_number.append(response['number'])
+                print(f"Something went wrong while creating PR for {branches[i]}, please try again.")
             except Exception as e:
                 print(f"An error occured: {e}")
                 

@@ -1,7 +1,10 @@
+import os
 from pr import GithubAPI
+
 
 class Main:
     def __init__(self):
+        os.system("clear")
         
         # Enter repo owner and repo name
         repo_owner = ""
@@ -10,7 +13,7 @@ class Main:
         git = GithubAPI(repo_owner, repo_name)
         
         # Title
-        title = "[IAF-123][IAF-6969][HOTFIX]"
+        title = "[UK-6542]"
         
         # Body
         body = "**JIRA Ticket/Release** \n"
@@ -26,7 +29,7 @@ class Main:
         body += "- [x] Checklist covered"
         
         # Enter working branch
-        head = "dev"
+        head = "hotfix/1.24.11"
         
         # Enter branches you want to create PR for
         branches = [
