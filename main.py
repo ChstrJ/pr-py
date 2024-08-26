@@ -2,7 +2,12 @@ from pr import GithubAPI
 
 class Main:
     def __init__(self):
-        git = GithubAPI()
+        
+        # Enter repo owner and repo name
+        repo_owner = ""
+        repo_name = ""
+        
+        git = GithubAPI(repo_owner, repo_name)
         
         # Title
         title = "[IAF-123][IAF-6969][HOTFIX]"

@@ -4,11 +4,11 @@ import utils
 from dotenv import load_dotenv
 
 class GithubAPI:
-    def __init__(self):
+    def __init__(self, repo_owner, repo_name):
         load_dotenv()
         self.token = os.getenv("TOKEN")
-        self.repo_owner = os.getenv("REPO_OWNER")
-        self.repo_name = os.getenv("REPO_NAME")
+        self.repo_owner = repo_owner
+        self.repo_name = repo_name
         self.base_url = f"https://api.github.com/repos/{self.repo_owner}/{self.repo_name}"
         self.pull_number = []
         self.headers = {
