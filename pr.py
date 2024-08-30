@@ -9,7 +9,8 @@ class GithubAPI:
         self.token = os.getenv("TOKEN")
         self.repo_owner = repo_owner
         self.repo_name = repo_name
-        self.base_url = f"https://api.github.com/repos/{self.repo_owner}/{self.repo_name}"
+        self.repo_url = f"https://api.github.com/repos/{self.repo_owner}/{self.repo_name}"
+        self.user_url = f"https://api.github.com/users/";
         self.pull_number = []
         self.headers = {
             "Authorization": f"Bearer {self.token}",
@@ -18,7 +19,7 @@ class GithubAPI:
         }
         
     def create_pull_request(self, body, head, branches, title):
-        url = f"{self.base_url}/pulls"
+        url = f"{self.repo_url}/pulls"
         
         for i in range(len(branches)):
         
@@ -45,18 +46,14 @@ class GithubAPI:
                     print(f"{head} -> {branches[i]}")
                     print("--------------------------------------------------- \n")
                     self.pull_number.append(response['number'])
-                print(f"Something went wrong while creating PR for {branches[i]}, please try again.")
-            except Exception as e:
+                else: 
+                    print(f"Something went wrong while creating PR for {branches[i]}, please try again.")
+            except req.RequestException as e:
                 print(f"An error occured: {e}")
                 
-    def branch_exists(self, branch_name):
-        url = f"{self.base_url}/branches/{branch_name}"
-        request = req.get(url, headers=self.headers)
-        return request.status_code == 200
-
             
     def list_pulls(self, state):
-        url = f"{self.base_url}/pulls"
+        url = f"{self.repo_url}/pulls"
         
         params = {
             "state": state 
@@ -72,22 +69,38 @@ class GithubAPI:
                 pr_status = pr['state']
                 print(f"PR #{pr_number}: {pr_title} - Status: {pr_status}")
     
-      
     def request_reviewers(self, reviewers):
         
-        for i in range(len(reviewers)):
-            url = f"{self.base_url}/pulls/{self.pull_number[i]}/requested_reviewers"
-            
             payload = {
-                "reviewers": reviewers[i]
+                "reviewers": reviewers
             }
             
-            res = req.post(url, json=payload, headers=self.headers)
+        
+            print(f"Requesting reviewers...")
             
-            print(f"Requesting reviewers: {reviewers[i]}")
-            
-            if res.status_code == 201:
-                print("Reviewers successfully requested. \n")
+            for i in range(len(self.pull_number)):
+                
+                reviewer = reviewers[i]
+                pull = self.pull_number[i]
+                
+                url = f"{self.repo_url}/pulls/{pull}/requested_reviewers"
+                
+                if not self.user_exists(reviewer):
+                    print(f"{reviewer} does not exists")
+                    break
+                else: 
+                    req.post(url, json=payload, headers=self.headers)
+                    print(f"Successfully requested reviewers for {reviewers}")
+                
+                    
+                    
         
-        
-        
+    def branch_exists(self, branch_name):
+        url = f"{self.repo_url}/branches/{branch_name}"
+        request = req.get(url, headers=self.headers)
+        return request.status_code == 200
+    
+    def user_exists(self, user):
+        user_url = f"https://api.github.com/users/{user}"
+        res = req.get(user_url, headers=self.headers)
+        return res.status_code == 200 
