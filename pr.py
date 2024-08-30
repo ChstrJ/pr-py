@@ -90,7 +90,7 @@ class GithubAPI:
                     break
                 else: 
                     req.post(url, json=payload, headers=self.headers)
-                    print(f"Successfully requested reviewers for {reviewers}")
+                    print(f"Successfully requested reviewers -> {reviewers} -- PR # {pull}") 
                 
                     
                     
