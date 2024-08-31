@@ -1,4 +1,4 @@
-### Automated pull request
+# Automated pull request
 
 ## Environment Variables
 
@@ -9,6 +9,7 @@ To run this project, you will need to add the following environment variables to
 ```
 1. .venv\Scripts\activate
 2. pip install -r requirements.txt
-3. py main.py
+3. Edit the file main.py
+3. Run py main.py
 ```
 
