@@ -111,7 +111,9 @@ class GithubAPI:
 
                 for i in range(len(self.pull_number)):
 
-                    url = f"{self.repo_url}/pulls/{pull_number[i]}/requested_reviewers"
+                    pull = pull_number[i]
+
+                    url = f"{self.repo_url}/pulls/{pull}/requested_reviewers"
 
                     res = req.post(url, json=payload, headers=self.headers)
 
