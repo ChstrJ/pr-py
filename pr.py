@@ -111,7 +111,7 @@ class GithubAPI:
 
                 for i in range(len(self.pull_number)):
 
-                    pull = pull_number[i]
+                    pull = self.pull_number[i]
 
                     url = f"{self.repo_url}/pulls/{pull}/requested_reviewers"
 
