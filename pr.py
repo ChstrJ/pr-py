@@ -78,28 +78,52 @@ class GithubAPI:
         
     def request_reviewers(self, reviewers):
         
-            payload = {
-                "reviewers": reviewers
-            }
+            # payload = {
+            #     "reviewers": reviewers
+            # }
             
         
-            print(f"Requesting reviewers...")
+            # print(f"Requesting reviewers...")
             
-            for i in range(len(self.pull_number)):
+            # for i in range(len(self.pull_number)):
                 
-                reviewer = reviewers[i]
-                pull = self.pull_number[i]
+            #     reviewer = reviewers[i]
+            #     pull = self.pull_number[i]
                 
-                url = f"{self.repo_url}/pulls/{pull}/requested_reviewers"
+            #     url = f"{self.repo_url}/pulls/{pull}/requested_reviewers"
                 
-                if not self.user_exists(reviewer):
-                    print(f"{reviewer} does not exists")
-                    break
-                else: 
-                    req.post(url, json=payload, headers=self.headers)
-                    branch = self.get_branch(pull)
-                    print(f"Successfully requested reviewers -> {reviewers} -> PR # {pull}") 
-                    utils.log(self.txt_file, f"REVIEWERS: {reviewers} WORKING BRANCH: {branch[0].get("head")} MERGING BRANCH: {branch[0].get("base")} PR: ")
+            #     if not self.user_exists(reviewer):
+            #         print(f"{reviewer} does not exists")
+            #         break
+            #     else: 
+            #         req.post(url, json=payload, headers=self.headers)
+            #         branch = self.get_branch(pull)
+            #         print(f"Successfully requested reviewers -> {reviewers} -> PR # {pull}") 
+            #         utils.log(self.txt_file, f"REVIEWERS: {reviewers} WORKING BRANCH: {branch[0].get("head")} MERGING BRANCH: {branch[0].get("base")} PR: ")
+
+            print(f"Requesting reviewers...")
+
+            for reviewer in reviewers:
+
+                payload = {
+                    "reviewers": [reviewer]
+                }
+
+                for i in range(len(self.pull_number)):
+
+                    url = f"{self.repo_url}/pulls/{pull_number[i]}/requested_reviewers"
+
+                    res = req.post(url, json=payload, headers=self.headers)
+
+                    if res.status_code == 201:
+                        branch = self.get_branch(pull)
+                        print(f"Successfully requested reviewers -> {reviewer} -> PR # {pull}") 
+                        utils.log(self.txt_file, f"REVIEWERS: {reviewer} WORKING BRANCH: {branch[0].get("head")} MERGING BRANCH: {branch[0].get("base")} PR: ")
+                    else: 
+                        utils.log(self.txt_file, f"Error: {res.json()}")
+
+
+                    
                 
     def branch_exists(self, branch_name):
         url = f"{self.repo_url}/branches/{branch_name}"
