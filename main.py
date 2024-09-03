@@ -14,33 +14,31 @@ class Main:
         pr_format = PRFormatter()
         
         # Add title here
-        title = "[TICKET-123]"
+        title = "[]"
         
         # Add tickets here
         tickets = [
-            "[IAS-22](https://google.com)",
-            "[IAS-222](https://google.com)" 
+            "[]()",
         ]
         
         # Add descriptions here
         descriptions = [
-            "Desc1",
-            "Desc2"
+            "",
         ]
         
         # Enter working branch
-        head = "dev"
+        head = ""
         
         # Enter branches you want to create PR for
         branches = [
-            "test",
-            "on-cloud"
+            "",
+            ""
         ]
         
         # Add username of reviewers here
         reviewers = [
-            "iamgraypix",
-            "karriv18"
+            "",
+            ""
         ]
         
         body = pr_format.body_mapper(tickets, descriptions)
