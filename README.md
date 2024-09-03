@@ -4,6 +4,7 @@
 
 To run this project, you will need to add the following environment variables to your .env file
 
+Generate Github Token here : https://github.com/settings/tokens
 ```
 TOKEN=
 ```
