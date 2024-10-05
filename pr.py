@@ -25,7 +25,7 @@ class GithubAPI:
         for i in range(len(branches)):
         
             payload = {
-            "title": f"{title}/[{head}] -> {branches[i]}",
+            "title": f"{title}[{head}] -> {branches[i]}",
             "body": body,
             "head": head,
             "base": branches[i]
@@ -47,11 +47,8 @@ class GithubAPI:
                     print(f"WORKING BRANCH: {head} -> MERGING BRANCH: {branches[i]}")
                     print("--------------------------------------------------- \n")
                     self.pull_number.append(response['number'])
-                    utils.log(self.txt_file, f"Repo Owner / Repo Name: {self.repo_owner} / {self.repo_name}")
-                    utils.log(self.txt_file, f"Sucessfully created PR for {head} -> {branches[i]} -> PR # {response['number']}")
                 else: 
                     print(f"Something went wrong while creating PR for {branches[i]}, please try again.")
-                    utils.log(self.txt_file, f"Something went wrong in {branches[i]}")
             except req.RequestException as e:
                 print(f"An error occured: {e}")
                 
@@ -74,35 +71,34 @@ class GithubAPI:
                 pr_title = pr['title']
                 pr_status = pr['state']
                 print(f"PR #{pr_number}: {pr_title} - Status: {pr_status}")
-                utils.log(self.txt_file, f"PR #{pr_number}: {pr_title} - Status: {pr_status}")
         
     def request_reviewers(self, reviewers):
 
         print(f"Requesting reviewers...")
 
-        for reviewer in reviewers:
+        for i in range(len(self.pull_number)):
+            
+            if len(reviewers) > 1:
+                payload = {
+                    "reviewers": reviewers
+                }
+            else:
+                payload = {
+                    "reviewers": [reviewers[0]]
+                }
+            
+            pull = self.pull_number[i]
 
-            payload = {
-                "reviewers": [reviewer]
-            }
+            url = f"{self.repo_url}/pulls/{pull}/requested_reviewers"
 
-            for i in range(len(self.pull_number)):
+            res = req.post(url, json=payload, headers=self.headers)
 
-                pull = self.pull_number[i]
-
-                url = f"{self.repo_url}/pulls/{pull}/requested_reviewers"
-
-                res = req.post(url, json=payload, headers=self.headers)
-
-                if res.status_code == 201:
-                    branch = self.get_branch(pull)
-                    print(f"Successfully requested reviewers -> {reviewer} -> PR # {pull}") 
-                    utils.log(self.txt_file, f"REVIEWERS: {reviewer} WORKING BRANCH: {branch[0].get("head")} MERGING BRANCH: {branch[0].get("base")} PR: ")
-                else: 
-                    utils.log(self.txt_file, f"Error: {res.json()}")
-
-
-                    
+            if res.status_code == 201:
+                branch = self.get_branch(pull)
+                print(f"Successfully requested reviewers -> {reviewers} -> PR # {pull}") 
+            else: 
+                print(f"Something went wrong in {branch}")
+                utils.log(self.txt_file, f"Error: {res.json()}")
                 
     def branch_exists(self, branch_name):
         url = f"{self.repo_url}/branches/{branch_name}"
