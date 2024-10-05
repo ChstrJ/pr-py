@@ -7,7 +7,7 @@ class Main:
         os.system("clear")
 
         # Enter repo owner
-        repo_owner = "iamgraypix"
+        repo_owner = ""
                 
         # Default branches modify if needed.
         release = [
