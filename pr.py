@@ -41,9 +41,11 @@ class GithubAPI:
             
             try:
                 if request.status_code == 201:
+                    print("\n---------------------------------------------------")
                     print(f"Creating PR for {branches[i]}...")
                     print(f"Repo Owner / Repo Name: {self.repo_owner} / {self.repo_name}")
                     print(f"Successfully created PR at {utils.getToday()}")
+                    print(f"PR Link: {response['html_url']}")
                     print(f"WORKING BRANCH: {head} -> MERGING BRANCH: {branches[i]}")
                     print("--------------------------------------------------- \n")
                     self.pull_number.append(response['number'])
@@ -86,6 +88,8 @@ class GithubAPI:
                 payload = {
                     "reviewers": [reviewers[0]]
                 }
+                
+            branch = None
             
             pull = self.pull_number[i]
 
@@ -98,7 +102,7 @@ class GithubAPI:
                 print(f"Successfully requested reviewers -> {reviewers} -> PR # {pull}") 
             else: 
                 print(f"Something went wrong in {branch}")
-                utils.log(self.txt_file, f"Error: {res.json()}")
+                
                 
     def branch_exists(self, branch_name):
         url = f"{self.repo_url}/branches/{branch_name}"
@@ -122,40 +126,4 @@ class GithubAPI:
             }
         ] 
     
-class PRFormatter:
-    
-    def body_mapper(self, tickets, descriptions):
-        
-        # Add Ticket and Ticket link here
-        body = "**JIRA Ticket/Release** \n \n"
-        body += self.add_ticket(tickets)
-        
-        body += "\n"
-        
-        # Add bullet here
-        body += "**Description** \n"
-        body += self.add_description(descriptions)
-        
-        body += "\n"
-        
-        body += "Refer to the checklist "
-        body += "[here](https://qualitytrade.atlassian.net/wiki/spaces/BDT/pages/2708307968/Pull+request+guidelines) \n"
-        body += "- [x] Checklist covered"  
-        
-        return body
-        
-    def add_ticket(self, tickets):
-        format_tickets = []
-        
-        for ticket in tickets:
-            format_tickets.append(f"- {ticket} \n")
-            
-        return "\n".join(format_tickets) 
-    
-    def add_description(self, descriptions): 
-        format_descriptions = []
-        
-        for description in descriptions:
-            format_descriptions.append(f"- {description} \n")
-        
-        return "\n".join(format_descriptions)        
+
